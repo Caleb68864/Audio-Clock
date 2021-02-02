@@ -1,19 +1,18 @@
+from AC_GUI import mainFrame
+from datetime import datetime
+from pathlib import Path
+from playsound import playsound
+import PIL
 import csv
+import datetime
+import glob 
+import os.path
 import random
 import schedule
-import time
-import datetime
+import sys
 import threading
-import glob 
+import time
 import wx
-from datetime import datetime
-from playsound import playsound
-from AC_GUI import mainFrame
-
-def get_time():
-    print(datetime.now())
-
-
 
 
 
@@ -27,7 +26,22 @@ class Main(wx.Frame):
         self.loadAudioFiles()
         self.loadSchedule()
         
+        from PIL import Image
+        filename = r'res/Clock.png'
+        img = Image.open(filename)
+        img.save('res/Clock.ico')
+        
+        if hasattr(sys, "_MEIPASS"):
+            ico_str = os.path.join(sys._MEIPASS, 'res/Clock.ico')
+        else:
+            ico_str = 'res/Clock.ico'
 
+        ico = Path(ico_str)
+        if ico.is_file():
+            ico = wx.Icon(ico_str, wx.BITMAP_TYPE_ICO)
+            self.SetIcon(ico)
+        else:
+            print("Ico File Not Found")
 
         self.Show(True)
         
