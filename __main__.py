@@ -4,7 +4,7 @@ from pathlib import Path
 from playsound import playsound
 import PIL
 import csv
-import datetime
+from datetime import datetime
 import glob 
 import os.path
 import random
