@@ -70,14 +70,11 @@ class Main(wx.Frame):
         return cease_continuous_run
 
     def loadAudioFiles(self):
-        for mp3 in glob.glob('./audio/*.mp3'):
-            self.auds.append(mp3)
-
-        for wav in glob.glob('./audio/*.wav'):
-            self.auds.append(wav)
-
-        for aud in self.auds:
-            print(aud)
+        mp3s = glob.glob('./audio/*.mp3')
+        wavs = glob.glob('./audio/*.wav')
+        self.auds = mp3s + wavs
+        # for aud in self.auds:
+            # print(aud)
         
         self.lbFiles.Clear()
         try:
