@@ -23,17 +23,23 @@ class mainFrame ( wx.Frame ):
 
 		self.m_menubar1 = wx.MenuBar( 0 )
 		self.m_menu1 = wx.Menu()
-		self.m_menuItem1 = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"Add Time", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu1.Append( self.m_menuItem1 )
+		self.m_menuItem5 = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"Reload", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu1.Append( self.m_menuItem5 )
 
-		self.m_menuItem2 = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"Remove Time", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu1.Append( self.m_menuItem2 )
+		self.m_menu11 = wx.Menu()
+		self.m_menuItem1 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Add Time", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu11.Append( self.m_menuItem1 )
 
-		self.m_menuItem3 = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"Add Audio", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu1.Append( self.m_menuItem3 )
+		self.m_menuItem2 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Remove Time", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu11.Append( self.m_menuItem2 )
 
-		self.m_menuItem4 = wx.MenuItem( self.m_menu1, wx.ID_ANY, u"Remove Audio", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu1.Append( self.m_menuItem4 )
+		self.m_menuItem3 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Add Audio", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu11.Append( self.m_menuItem3 )
+
+		self.m_menuItem4 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Remove Audio", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu11.Append( self.m_menuItem4 )
+
+		self.m_menu1.AppendSubMenu( self.m_menu11, u"Configure" )
 
 		self.m_menubar1.Append( self.m_menu1, u"File" )
 
@@ -85,6 +91,9 @@ class mainFrame ( wx.Frame ):
 		self.Centre( wx.BOTH )
 
 		# Connect Events
+		self.Bind( wx.EVT_MENU, self.selReload, id = self.m_menuItem5.GetId() )
+		self.Bind( wx.EVT_MENU, self.selAddTime, id = self.m_menuItem1.GetId() )
+		self.Bind( wx.EVT_MENU, self.selRemoveTime, id = self.m_menuItem2.GetId() )
 		self.btnStart.Bind( wx.EVT_BUTTON, self.ClickStart )
 		self.btnPlay.Bind( wx.EVT_BUTTON, self.ClickPlay )
 		self.btnRandom.Bind( wx.EVT_BUTTON, self.ClickRandom )
@@ -95,6 +104,15 @@ class mainFrame ( wx.Frame ):
 
 
 	# Virtual event handlers, overide them in your derived class
+	def selReload( self, event ):
+		event.Skip()
+
+	def selAddTime( self, event ):
+		event.Skip()
+
+	def selRemoveTime( self, event ):
+		event.Skip()
+
 	def ClickStart( self, event ):
 		event.Skip()
 
@@ -106,5 +124,23 @@ class mainFrame ( wx.Frame ):
 
 	def DClickFile( self, event ):
 		event.Skip()
+
+
+###########################################################################
+## Class mainDialog
+###########################################################################
+
+class mainDialog ( wx.Dialog ):
+
+	def __init__( self, parent ):
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Dialog", pos = wx.DefaultPosition, size = wx.Size( 315,167 ), style = wx.DEFAULT_DIALOG_STYLE )
+
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+
+		self.Centre( wx.BOTH )
+
+	def __del__( self ):
+		pass
 
 

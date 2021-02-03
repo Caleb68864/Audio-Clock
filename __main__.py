@@ -1,4 +1,5 @@
 from AC_GUI import mainFrame
+from AC_GUI import mainDialog
 from datetime import datetime
 from pathlib import Path
 from playsound import playsound
@@ -14,6 +15,22 @@ import threading
 import time
 import wx
 
+class dialog(mainDialog):
+    def __init__(self, parent):
+        if hasattr(sys, "_MEIPASS"):
+            ico_str = os.path.join(sys._MEIPASS, 'res/Clock.ico')
+        else:
+            ico_str = 'res/Clock.ico'
+
+        ico = Path(ico_str)
+        if ico.is_file():
+            ico = wx.Icon(ico_str, wx.BITMAP_TYPE_ICO)
+            self.SetIcon(ico)
+        else:
+            print("Ico File Not Found")
+
+        self.Show(True)
+        
 
 
 class Main(wx.Frame):
@@ -70,6 +87,7 @@ class Main(wx.Frame):
         return cease_continuous_run
 
     def loadAudioFiles(self):
+        self.FormDisable()
         mp3s = glob.glob('./audio/*.mp3')
         wavs = glob.glob('./audio/*.wav')
         self.auds = mp3s + wavs
@@ -81,8 +99,11 @@ class Main(wx.Frame):
             self.lbFiles.InsertItems(self.auds, 0)
         except:
             print("No Audio File Found")
+        self.FormEnable()
             
     def loadSchedule(self):
+        self.FormDisable()
+        self.times = []
         with open('clock_schedule.csv') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
@@ -97,6 +118,7 @@ class Main(wx.Frame):
             self.lbSchedule.InsertItems(self.times, 0)
         except:
             print("No Schedule Found")
+        self.FormEnable()
             
     def play_random(self):
         rand = random.randrange(0, len(self.auds))
@@ -167,6 +189,26 @@ class Main(wx.Frame):
         
     def ClickRandom( self, event ):
         self.play_random()
+    
+    def selReload(self, event):
+        self.loadAudioFiles()
+        self.loadSchedule()
+    
+    def selAddTime(self, event):
+        print(event)
+        
+    def selRemoveTime(self, event):
+        try:
+            self.lbSchedule.Delete(self.lbSchedule.GetSelection())
+        except Exception as e:
+            pass
+            
+        
+    def selAddFile(self, event):
+        print(event)
+        
+    def selRemoveFile(self, event):
+        print(event)
 
 if __name__ == "__main__":
     app = wx.App(False)
