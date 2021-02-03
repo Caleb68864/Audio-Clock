@@ -15,8 +15,9 @@ import threading
 import time
 import wx
 
-class dialog(mainDialog):
-    def __init__(self, parent):
+class Dialog(mainDialog):
+    def __init__(self, parent, title):
+        mainDialog.__init__(self, parent)
         if hasattr(sys, "_MEIPASS"):
             ico_str = os.path.join(sys._MEIPASS, 'res/Clock.ico')
         else:
@@ -28,6 +29,8 @@ class dialog(mainDialog):
             self.SetIcon(ico)
         else:
             print("Ico File Not Found")
+
+        self.SetTitle(title)
 
         self.Show(True)
         
@@ -41,8 +44,8 @@ class Main(wx.Frame):
         self.times = []
         self.stop_run_continuously = None
         
-        self.miAddTime.Enable(False)
-        self.miAddAudio.Enable(False)
+        # self.miAddTime.Enable(False)
+        # self.miAddAudio.Enable(False)
         
         self.loadAudioFiles()
         self.loadSchedule()
@@ -199,7 +202,7 @@ class Main(wx.Frame):
         self.loadSchedule()
     
     def selAddTime(self, event):
-        print(event)
+        atd = Dialog(self, "Add Time")
         
     def selRemoveTime(self, event):
         try:
@@ -218,7 +221,7 @@ class Main(wx.Frame):
             
         
     def selAddFile(self, event):
-        print(event)
+        atd = Dialog(self, "Add Audio")
         
     def selRemoveFile(self, event):
         try:

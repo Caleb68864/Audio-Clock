@@ -94,6 +94,7 @@ class mainFrame ( wx.Frame ):
 		self.Bind( wx.EVT_MENU, self.selReload, id = self.m_menuItem5.GetId() )
 		self.Bind( wx.EVT_MENU, self.selAddTime, id = self.miAddTime.GetId() )
 		self.Bind( wx.EVT_MENU, self.selRemoveTime, id = self.m_menuItem2.GetId() )
+		self.Bind( wx.EVT_MENU, self.selAddFile, id = self.miAddAudio.GetId() )
 		self.Bind( wx.EVT_MENU, self.selRemoveFile, id = self.m_menuItem4.GetId() )
 		self.btnStart.Bind( wx.EVT_BUTTON, self.ClickStart )
 		self.btnPlay.Bind( wx.EVT_BUTTON, self.ClickPlay )
@@ -112,6 +113,9 @@ class mainFrame ( wx.Frame ):
 		event.Skip()
 
 	def selRemoveTime( self, event ):
+		event.Skip()
+
+	def selAddFile( self, event ):
 		event.Skip()
 
 	def selRemoveFile( self, event ):
