@@ -205,34 +205,52 @@ class Main(wx.Frame):
         atd = Dialog(self, "Add Time")
         
     def selRemoveTime(self, event):
-        try:
-            self.lbSchedule.Delete(self.lbSchedule.GetSelection())
-            rows = self.lbSchedule.GetStrings()
-            print(rows)
-            file = open(self.schedule_file, 'w+', newline ='') 
-  
-            with file:     
-                write = csv.writer(file) 
-                for row in rows:
-                    write.writerow([row]) 
-            self.loadSchedule()
-        except Exception as e:
-            pass
-            
+        dlg = wx.MessageDialog(None, "Do you want to delete {}?".format(self.lbSchedule.GetString(self.lbSchedule.GetSelection())),'Delete Time',wx.YES_NO | wx.ICON_QUESTION)
+        result = dlg.ShowModal()
+
+        if result == wx.ID_YES:
+            # print("Yes pressed")
+            try:
+                self.lbSchedule.Delete(self.lbSchedule.GetSelection())
+                rows = self.lbSchedule.GetStrings()
+                print(rows)
+                file = open(self.schedule_file, 'w+', newline ='') 
+      
+                with file:     
+                    write = csv.writer(file) 
+                    for row in rows:
+                        write.writerow([row]) 
+                self.loadSchedule()
+            except Exception as e:
+                pass
+            else:
+                print("The file {} does not exist".format(d_file))
+        else:
+            print("No pressed")
         
+
     def selAddFile(self, event):
-        atd = Dialog(self, "Add Audio")
+        pass#atd = Dialog(self, "Add Audio")
         
     def selRemoveFile(self, event):
-        try:
-            sel = self.lbFiles.GetSelection()
-            sel_str = self.lbFiles.GetString(self.lbFiles.GetSelection())
-            print(sel_str)
-            os.remove(sel_str)
-            self.lbFiles.Delete(sel)
+        dlg = wx.MessageDialog(None, "Do you want to delete {}?".format(self.lbFiles.GetString(self.lbFiles.GetSelection())),'Delete Audio',wx.YES_NO | wx.ICON_QUESTION)
+        result = dlg.ShowModal()
 
-        except Exception as e:
-            pass
+        if result == wx.ID_YES:
+            # print("Yes pressed")
+            try:
+                sel = self.lbFiles.GetSelection()
+                sel_str = self.lbFiles.GetString(self.lbFiles.GetSelection())
+                print(sel_str)
+                os.remove(sel_str)
+                self.lbFiles.Delete(sel)
+
+        
+            except Exception as e:
+                pass
+        else:
+            print("No pressed")
+        
 
 if __name__ == "__main__":
     app = wx.App(False)
