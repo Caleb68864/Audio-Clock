@@ -230,7 +230,7 @@ class Main(wx.Frame):
         
 
     def selAddFile(self, event):
-        pass#atd = Dialog(self, "Add Audio")
+        atd = Dialog(self, "Add Audio")
         
     def selRemoveFile(self, event):
         dlg = wx.MessageDialog(None, "Do you want to delete {}?".format(self.lbFiles.GetString(self.lbFiles.GetSelection())),'Delete Audio',wx.YES_NO | wx.ICON_QUESTION)
