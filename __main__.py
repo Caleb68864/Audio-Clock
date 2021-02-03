@@ -36,9 +36,13 @@ class dialog(mainDialog):
 class Main(wx.Frame):
     def __init__(self, parent):
         mainFrame.__init__(self, parent)
+        self.schedule_file = 'clock_schedule.csv'
         self.auds = []
         self.times = []
         self.stop_run_continuously = None
+        
+        self.miAddTime.Enable(False)
+        self.miAddAudio.Enable(False)
         
         self.loadAudioFiles()
         self.loadSchedule()
@@ -104,7 +108,7 @@ class Main(wx.Frame):
     def loadSchedule(self):
         self.FormDisable()
         self.times = []
-        with open('clock_schedule.csv') as csv_file:
+        with open(self.schedule_file) as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
             
@@ -200,6 +204,15 @@ class Main(wx.Frame):
     def selRemoveTime(self, event):
         try:
             self.lbSchedule.Delete(self.lbSchedule.GetSelection())
+            rows = self.lbSchedule.GetStrings()
+            print(rows)
+            file = open(self.schedule_file, 'w+', newline ='') 
+  
+            with file:     
+                write = csv.writer(file) 
+                for row in rows:
+                    write.writerow([row]) 
+            self.loadSchedule()
         except Exception as e:
             pass
             
@@ -208,7 +221,15 @@ class Main(wx.Frame):
         print(event)
         
     def selRemoveFile(self, event):
-        print(event)
+        try:
+            sel = self.lbFiles.GetSelection()
+            sel_str = self.lbFiles.GetString(self.lbFiles.GetSelection())
+            print(sel_str)
+            os.remove(sel_str)
+            self.lbFiles.Delete(sel)
+
+        except Exception as e:
+            pass
 
 if __name__ == "__main__":
     app = wx.App(False)

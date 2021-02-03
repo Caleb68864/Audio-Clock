@@ -27,14 +27,14 @@ class mainFrame ( wx.Frame ):
 		self.m_menu1.Append( self.m_menuItem5 )
 
 		self.m_menu11 = wx.Menu()
-		self.m_menuItem1 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Add Time", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu11.Append( self.m_menuItem1 )
+		self.miAddTime = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Add Time", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu11.Append( self.miAddTime )
 
 		self.m_menuItem2 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Remove Time", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu11.Append( self.m_menuItem2 )
 
-		self.m_menuItem3 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Add Audio", wx.EmptyString, wx.ITEM_NORMAL )
-		self.m_menu11.Append( self.m_menuItem3 )
+		self.miAddAudio = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Add Audio", wx.EmptyString, wx.ITEM_NORMAL )
+		self.m_menu11.Append( self.miAddAudio )
 
 		self.m_menuItem4 = wx.MenuItem( self.m_menu11, wx.ID_ANY, u"Remove Audio", wx.EmptyString, wx.ITEM_NORMAL )
 		self.m_menu11.Append( self.m_menuItem4 )
@@ -92,8 +92,9 @@ class mainFrame ( wx.Frame ):
 
 		# Connect Events
 		self.Bind( wx.EVT_MENU, self.selReload, id = self.m_menuItem5.GetId() )
-		self.Bind( wx.EVT_MENU, self.selAddTime, id = self.m_menuItem1.GetId() )
+		self.Bind( wx.EVT_MENU, self.selAddTime, id = self.miAddTime.GetId() )
 		self.Bind( wx.EVT_MENU, self.selRemoveTime, id = self.m_menuItem2.GetId() )
+		self.Bind( wx.EVT_MENU, self.selRemoveFile, id = self.m_menuItem4.GetId() )
 		self.btnStart.Bind( wx.EVT_BUTTON, self.ClickStart )
 		self.btnPlay.Bind( wx.EVT_BUTTON, self.ClickPlay )
 		self.btnRandom.Bind( wx.EVT_BUTTON, self.ClickRandom )
@@ -111,6 +112,9 @@ class mainFrame ( wx.Frame ):
 		event.Skip()
 
 	def selRemoveTime( self, event ):
+		event.Skip()
+
+	def selRemoveFile( self, event ):
 		event.Skip()
 
 	def ClickStart( self, event ):

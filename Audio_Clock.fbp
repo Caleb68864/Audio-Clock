@@ -107,7 +107,7 @@
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Add Time</property>
-                            <property name="name">m_menuItem1</property>
+                            <property name="name">miAddTime</property>
                             <property name="permission">none</property>
                             <property name="shortcut"></property>
                             <property name="unchecked_bitmap"></property>
@@ -135,7 +135,7 @@
                             <property name="id">wxID_ANY</property>
                             <property name="kind">wxITEM_NORMAL</property>
                             <property name="label">Add Audio</property>
-                            <property name="name">m_menuItem3</property>
+                            <property name="name">miAddAudio</property>
                             <property name="permission">none</property>
                             <property name="shortcut"></property>
                             <property name="unchecked_bitmap"></property>
@@ -152,6 +152,7 @@
                             <property name="permission">none</property>
                             <property name="shortcut"></property>
                             <property name="unchecked_bitmap"></property>
+                            <event name="OnMenuSelection">selRemoveFile</event>
                         </object>
                     </object>
                 </object>
