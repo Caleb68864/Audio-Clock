@@ -135,10 +135,10 @@ class mainFrame ( wx.Frame ):
 
 
 ###########################################################################
-## Class scheduleDialog
+## Class Dialog
 ###########################################################################
 
-class scheduleDialog ( wx.Dialog ):
+class Dialog ( wx.Dialog ):
 
 	def __init__( self, parent ):
 		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Dialog", pos = wx.DefaultPosition, size = wx.Size( 315,102 ), style = wx.DEFAULT_DIALOG_STYLE )
@@ -148,6 +148,60 @@ class scheduleDialog ( wx.Dialog ):
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
 		bsTime = wx.BoxSizer( wx.HORIZONTAL )
+
+
+		bSizer6.Add( bsTime, 1, wx.EXPAND, 5 )
+
+		bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.mdBtnAdd = wx.Button( self, wx.ID_ANY, u"Add", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer7.Add( self.mdBtnAdd, 1, wx.ALL, 5 )
+
+		self.mdBtnCancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
+		bSizer7.Add( self.mdBtnCancel, 1, wx.ALL, 5 )
+
+
+		bSizer6.Add( bSizer7, 1, wx.EXPAND, 5 )
+
+
+		self.SetSizer( bSizer6 )
+		self.Layout()
+
+		self.Centre( wx.BOTH )
+
+		# Connect Events
+		self.mdBtnAdd.Bind( wx.EVT_BUTTON, self.mdBtnAdd_Click )
+		self.mdBtnCancel.Bind( wx.EVT_BUTTON, self.mdBtnCancel_Click )
+
+	def __del__( self ):
+		pass
+
+
+	# Virtual event handlers, overide them in your derived class
+	def mdBtnAdd_Click( self, event ):
+		event.Skip()
+
+	def mdBtnCancel_Click( self, event ):
+		event.Skip()
+
+
+###########################################################################
+## Class audioDialog
+###########################################################################
+
+class audioDialog ( wx.Dialog ):
+
+	def __init__( self, parent ):
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Add Audio", pos = wx.DefaultPosition, size = wx.Size( 315,102 ), style = wx.DEFAULT_DIALOG_STYLE )
+
+		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
+
+		bSizer6 = wx.BoxSizer( wx.VERTICAL )
+
+		bsTime = wx.BoxSizer( wx.HORIZONTAL )
+
+		self.fpAudio = wx.FilePickerCtrl( self, wx.ID_ANY, wx.EmptyString, u"Select a file", u"(*.mp3,*.wav)|*.mp3;*.wav", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+		bsTime.Add( self.fpAudio, 1, wx.ALL, 5 )
 
 
 		bSizer6.Add( bsTime, 1, wx.EXPAND, 5 )

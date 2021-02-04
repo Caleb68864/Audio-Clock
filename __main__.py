@@ -1,5 +1,6 @@
 from AC_GUI import mainFrame
-from AC_GUI import scheduleDialog
+from AC_GUI import Dialog
+from AC_GUI import audioDialog
 from datetime import datetime
 from pathlib import Path
 from playsound import playsound
@@ -16,9 +17,9 @@ import time
 import wx
 from wx.lib.masked import TimeCtrl
 
-class Dialog(scheduleDialog):
+class sheduleDialog(Dialog):
     def __init__(self, parent, title, rows):
-        scheduleDialog.__init__(self, parent)
+        Dialog.__init__(self, parent)
         if hasattr(sys, "_MEIPASS"):
             ico_str = os.path.join(sys._MEIPASS, 'res/Clock.ico')
         else:
@@ -40,8 +41,7 @@ class Dialog(scheduleDialog):
         self.GetSizer().GetItem(0).GetSizer().Add(self.triggerTime, 1, wx.ALL, 5 )
         self.GetSizer().GetItem(0).GetSizer().Add(self.timeSpin, 0, wx.EXPAND, 5 )
         self.SetTitle(title)
-
-    
+        
     def mdBtnAdd_Click( self, event ):
 
         self.rows.append(self.triggerTime.GetValue())
@@ -52,6 +52,44 @@ class Dialog(scheduleDialog):
     
     def mdBtnCancel_Click(self, event):
         self.Close()
+
+class audDialog(audioDialog):
+    def __init__(self, parent, title, rows):
+        audioDialog.__init__(self, parent)
+        if hasattr(sys, "_MEIPASS"):
+            ico_str = os.path.join(sys._MEIPASS, 'res/Clock.ico')
+        else:
+            ico_str = 'res/Clock.ico'
+
+        ico = Path(ico_str)
+        if ico.is_file():
+            ico = wx.Icon(ico_str, wx.BITMAP_TYPE_ICO)
+            self.SetIcon(ico)
+        else:
+            print("Ico File Not Found")
+        
+        self.rows = rows
+
+        # self.timeSpin = wx.SpinButton(self,-1,style=wx.SP_VERTICAL)
+        # self.triggerTime = TimeCtrl(self,-1,format='24HHMM')
+        # self.triggerTime.BindSpinButton(self.timeSpin)
+        
+        # self.GetSizer().GetItem(0).GetSizer().Add(self.triggerTime, 1, wx.ALL, 5 )
+        # self.GetSizer().GetItem(0).GetSizer().Add(self.timeSpin, 0, wx.EXPAND, 5 )
+        self.SetTitle(title)
+        
+    def mdBtnAdd_Click( self, event ):
+
+        self.rows.append(self.fpAudio.GetPath())
+        self.rows.sort()
+        print(self.rows)
+        # self.EndModal(self.rows)
+        self.Close()
+    
+    def mdBtnCancel_Click(self, event):
+        self.Close()
+    
+    
         
 
 
@@ -59,12 +97,14 @@ class Main(wx.Frame):
     def __init__(self, parent):
         mainFrame.__init__(self, parent)
         self.schedule_file = 'clock_schedule.csv'
+        self.audio_file = 'clock_audio.csv'
+        self.audio_dir = './audio'
         self.auds = []
         self.times = []
         self.stop_run_continuously = None
         
         # self.miAddTime.Enable(False)
-        self.miAddAudio.Enable(False)
+        # self.miAddAudio.Enable(False)
         
         self.loadAudioFiles()
         self.loadSchedule()
@@ -114,8 +154,8 @@ class Main(wx.Frame):
 
     def loadAudioFiles(self):
         self.FormDisable()
-        mp3s = glob.glob('./audio/*.mp3')
-        wavs = glob.glob('./audio/*.wav')
+        mp3s = glob.glob('{}/*.mp3'.format(self.audio_dir))
+        wavs = glob.glob('{}/*.wav'.format(self.audio_dir))
         self.auds = mp3s + wavs
         # for aud in self.auds:
             # print(aud)
@@ -221,7 +261,7 @@ class Main(wx.Frame):
         self.loadSchedule()
     
     def selAddTime(self, event):
-        atd = Dialog(self, "Add Time", self.times)
+        atd = sheduleDialog(self, "Add Time", self.times)
         atd.ShowModal()
         # print(atd.rows)
         self.times = atd.rows
@@ -258,7 +298,18 @@ class Main(wx.Frame):
         
 
     def selAddFile(self, event):
-        atd = Dialog(self, "Add Audio")
+        atd = audDialog(self, "Add Audio", self.auds)
+        atd.ShowModal()
+        # print(atd.rows)
+        self.auds = atd.rows
+        file = open(self.audio_file, 'w+', newline ='') 
+      
+        with file:     
+            write = csv.writer(file) 
+            for row in atd.rows:
+                write.writerow([row]) 
+        self.loadAudioFiles()
+        atd.Destroy()
         
     def selRemoveFile(self, event):
         dlg = wx.MessageDialog(None, "Do you want to delete {}?".format(self.lbFiles.GetString(self.lbFiles.GetSelection())),'Delete Audio',wx.YES_NO | wx.ICON_QUESTION)
