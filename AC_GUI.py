@@ -75,7 +75,7 @@ class mainFrame ( wx.Frame ):
 		bSizer3 = wx.BoxSizer( wx.VERTICAL )
 
 		lbFilesChoices = []
-		self.lbFiles = wx.ListBox( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, lbFilesChoices, wx.LB_NEEDED_SB|wx.LB_SORT )
+		self.lbFiles = wx.ListBox( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, lbFilesChoices, wx.LB_NEEDED_SB )
 		bSizer3.Add( self.lbFiles, 1, wx.ALL|wx.EXPAND, 5 )
 
 

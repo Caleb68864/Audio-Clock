@@ -153,37 +153,52 @@ class Main(wx.Frame):
         return cease_continuous_run
 
     def loadAudioFiles(self):
-        self.FormDisable()
-        mp3s = glob.glob('{}/*.mp3'.format(self.audio_dir))
-        wavs = glob.glob('{}/*.wav'.format(self.audio_dir))
-        self.auds = mp3s + wavs
+        
         # for aud in self.auds:
             # print(aud)
+        self.FormDisable()
+        self.auds = []
         
-        self.lbFiles.Clear()
         try:
-            self.lbFiles.InsertItems(self.auds, 0)
+            with open(self.audio_file) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                line_count = 0
+            
+                for row in csv_reader:
+                    self.auds.append(row[0])
+                    print(row[0])
+        
         except:
             print("No Audio File Found")
+            mp3s = glob.glob('{}/*.mp3'.format(self.audio_dir))
+            wavs = glob.glob('{}/*.wav'.format(self.audio_dir))
+            self.auds = mp3s + wavs
+        self.lbFiles.Clear()
+        self.lbFiles.InsertItems(self.auds, 0)
         self.FormEnable()
             
     def loadSchedule(self):
         self.FormDisable()
         self.times = []
-        with open(self.schedule_file) as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=',')
-            line_count = 0
-            
-            for row in csv_reader:
-                self.times.append(row[0])
-                print(row[0])
-            # print(self.times)
-        
-        self.lbSchedule.Clear()        
+        self.lbSchedule.Clear() 
         try:
+            with open(self.schedule_file) as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                line_count = 0
+                
+                for row in csv_reader:
+                    self.times.append(row[0])
+                    print(row[0])
+                # print(self.times)
             self.lbSchedule.InsertItems(self.times, 0)
         except:
             print("No Schedule Found")
+            file = open(self.schedule_file, 'w+', newline ='') 
+            with file:     
+                write = csv.writer(file) 
+                write.writerow(['']) 
+            
+        
         self.FormEnable()
             
     def play_random(self):
@@ -210,14 +225,15 @@ class Main(wx.Frame):
         self.lbFiles.Enable()
     
     def play_file(self, aud):
-        try:
-            self.FormDisable()
+        self.FormDisable()
+        try:    
             playsound(aud)
             print("{} - {}".format(datetime.now(), aud))
-            self.FormEnable()
+            
         except Exception as e:
             print(e)
-            
+        self.FormEnable()
+        
     def DClickFile( self, event ):
         self.play_file(event.GetString())
      
@@ -318,13 +334,16 @@ class Main(wx.Frame):
         if result == wx.ID_YES:
             # print("Yes pressed")
             try:
-                sel = self.lbFiles.GetSelection()
-                sel_str = self.lbFiles.GetString(self.lbFiles.GetSelection())
-                print(sel_str)
-                os.remove(sel_str)
-                self.lbFiles.Delete(sel)
-
-        
+                self.lbFiles.Delete(self.lbFiles.GetSelection())
+                rows = self.lbFiles.GetStrings()
+                file = open(self.audio_file, 'w+', newline ='') 
+      
+                with file:     
+                    write = csv.writer(file) 
+                    for row in rows:
+                        write.writerow([row]) 
+                self.loadAudioFiles()
+                        
             except Exception as e:
                 pass
         else:
