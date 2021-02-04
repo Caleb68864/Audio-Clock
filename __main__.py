@@ -173,6 +173,13 @@ class Main(wx.Frame):
             mp3s = glob.glob('{}/*.mp3'.format(self.audio_dir))
             wavs = glob.glob('{}/*.wav'.format(self.audio_dir))
             self.auds = mp3s + wavs
+            file = open(self.audio_file, 'w+', newline ='') 
+      
+            with file:     
+                write = csv.writer(file) 
+                for row in self.auds:
+                    write.writerow([row]) 
+        # print(self.auds)
         self.lbFiles.Clear()
         self.lbFiles.InsertItems(self.auds, 0)
         self.FormEnable()
