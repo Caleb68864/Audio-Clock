@@ -1,5 +1,5 @@
 from AC_GUI import mainFrame
-from AC_GUI import mainDialog
+from AC_GUI import scheduleDialog
 from datetime import datetime
 from pathlib import Path
 from playsound import playsound
@@ -15,9 +15,9 @@ import threading
 import time
 import wx
 
-class Dialog(mainDialog):
+class Dialog(scheduleDialog):
     def __init__(self, parent, title):
-        mainDialog.__init__(self, parent)
+        scheduleDialog.__init__(self, parent)
         if hasattr(sys, "_MEIPASS"):
             ico_str = os.path.join(sys._MEIPASS, 'res/Clock.ico')
         else:
@@ -33,6 +33,24 @@ class Dialog(mainDialog):
         self.SetTitle(title)
 
         self.Show(True)
+    
+    def mdBtnAdd_Click(self, event):
+        try:
+            rows = parent.lbSchedule.GetStrings()
+            print(rows)
+            self.lbSchedule.InsertItems(self.times, 0)
+            file = open(self.schedule_file, 'w+', newline ='') 
+  
+            # with file:     
+                # write = csv.writer(file) 
+                # for row in rows:
+                    # write.writerow([row]) 
+            self.loadSchedule()
+        except Exception as e:
+            pass
+    
+    def mdBtnCancel_Click(self, event):
+        self.Destroy()
         
 
 
