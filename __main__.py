@@ -14,9 +14,10 @@ import sys
 import threading
 import time
 import wx
+from wx.lib.masked import TimeCtrl
 
 class Dialog(scheduleDialog):
-    def __init__(self, parent, title):
+    def __init__(self, parent, title, rows):
         scheduleDialog.__init__(self, parent)
         if hasattr(sys, "_MEIPASS"):
             ico_str = os.path.join(sys._MEIPASS, 'res/Clock.ico')
@@ -29,28 +30,28 @@ class Dialog(scheduleDialog):
             self.SetIcon(ico)
         else:
             print("Ico File Not Found")
+        
+        self.rows = rows
 
+        self.timeSpin = wx.SpinButton(self,-1,style=wx.SP_VERTICAL)
+        self.triggerTime = TimeCtrl(self,-1,format='24HHMM')
+        self.triggerTime.BindSpinButton(self.timeSpin)
+        
+        self.GetSizer().GetItem(0).GetSizer().Add(self.triggerTime, 1, wx.ALL, 5 )
+        self.GetSizer().GetItem(0).GetSizer().Add(self.timeSpin, 0, wx.EXPAND, 5 )
         self.SetTitle(title)
 
-        self.Show(True)
     
-    def mdBtnAdd_Click(self, event):
-        try:
-            rows = parent.lbSchedule.GetStrings()
-            print(rows)
-            self.lbSchedule.InsertItems(self.times, 0)
-            file = open(self.schedule_file, 'w+', newline ='') 
-  
-            # with file:     
-                # write = csv.writer(file) 
-                # for row in rows:
-                    # write.writerow([row]) 
-            self.loadSchedule()
-        except Exception as e:
-            pass
+    def mdBtnAdd_Click( self, event ):
+
+        self.rows.append(self.triggerTime.GetValue())
+        self.rows.sort()
+        # print(self.rows)
+        # self.EndModal(self.rows)
+        self.Close()
     
     def mdBtnCancel_Click(self, event):
-        self.Destroy()
+        self.Close()
         
 
 
@@ -63,7 +64,7 @@ class Main(wx.Frame):
         self.stop_run_continuously = None
         
         # self.miAddTime.Enable(False)
-        # self.miAddAudio.Enable(False)
+        self.miAddAudio.Enable(False)
         
         self.loadAudioFiles()
         self.loadSchedule()
@@ -220,7 +221,18 @@ class Main(wx.Frame):
         self.loadSchedule()
     
     def selAddTime(self, event):
-        atd = Dialog(self, "Add Time")
+        atd = Dialog(self, "Add Time", self.times)
+        atd.ShowModal()
+        # print(atd.rows)
+        self.times = atd.rows
+        file = open(self.schedule_file, 'w+', newline ='') 
+      
+        with file:     
+            write = csv.writer(file) 
+            for row in atd.rows:
+                write.writerow([row]) 
+        self.loadSchedule()
+        atd.Destroy()
         
     def selRemoveTime(self, event):
         dlg = wx.MessageDialog(None, "Do you want to delete {}?".format(self.lbSchedule.GetString(self.lbSchedule.GetSelection())),'Delete Time',wx.YES_NO | wx.ICON_QUESTION)
@@ -231,7 +243,7 @@ class Main(wx.Frame):
             try:
                 self.lbSchedule.Delete(self.lbSchedule.GetSelection())
                 rows = self.lbSchedule.GetStrings()
-                print(rows)
+                # print(rows)
                 file = open(self.schedule_file, 'w+', newline ='') 
       
                 with file:     
@@ -241,8 +253,6 @@ class Main(wx.Frame):
                 self.loadSchedule()
             except Exception as e:
                 pass
-            else:
-                print("The file {} does not exist".format(d_file))
         else:
             print("No pressed")
         

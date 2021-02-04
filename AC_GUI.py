@@ -141,19 +141,24 @@ class mainFrame ( wx.Frame ):
 class scheduleDialog ( wx.Dialog ):
 
 	def __init__( self, parent ):
-		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Dialog", pos = wx.DefaultPosition, size = wx.Size( 315,167 ), style = wx.DEFAULT_DIALOG_STYLE )
+		wx.Dialog.__init__ ( self, parent, id = wx.ID_ANY, title = u"Dialog", pos = wx.DefaultPosition, size = wx.Size( 315,102 ), style = wx.DEFAULT_DIALOG_STYLE )
 
 		self.SetSizeHints( wx.DefaultSize, wx.DefaultSize )
 
 		bSizer6 = wx.BoxSizer( wx.VERTICAL )
 
+		bsTime = wx.BoxSizer( wx.HORIZONTAL )
+
+
+		bSizer6.Add( bsTime, 1, wx.EXPAND, 5 )
+
 		bSizer7 = wx.BoxSizer( wx.HORIZONTAL )
 
 		self.mdBtnAdd = wx.Button( self, wx.ID_ANY, u"Add", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer7.Add( self.mdBtnAdd, 0, wx.ALL, 5 )
+		bSizer7.Add( self.mdBtnAdd, 1, wx.ALL, 5 )
 
 		self.mdBtnCancel = wx.Button( self, wx.ID_ANY, u"Cancel", wx.DefaultPosition, wx.DefaultSize, 0 )
-		bSizer7.Add( self.mdBtnCancel, 0, wx.ALL, 5 )
+		bSizer7.Add( self.mdBtnCancel, 1, wx.ALL, 5 )
 
 
 		bSizer6.Add( bSizer7, 1, wx.EXPAND, 5 )
